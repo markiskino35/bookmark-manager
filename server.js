@@ -7,16 +7,19 @@ dotenv.config();
 import express from 'express';
 const app = express();
 
+// IMPORT ROUTER
+// bookmark import
+import bookmarks from './routes/bookmarks.js';
+
+// IMPORT MIDDLEWARE
+
 // DATABASE
 import connectDB from './database/connect.js';
 
-// MIDDLEWARE
+// USE MIDDLEWARE
 app.use(express.json());
 
-// ROUTES
-app.get('/', (req, res) => {
-  res.send('Express server is running!');
-});
+app.use('/api/bookmarks', bookmarks);
 
 // SERVER
 const port = process.env.PORT || 5000;
