@@ -25,7 +25,7 @@ const createBookmark = async (req, res) => {
       description,
       tags,
     });
-    res.status(201).json({ bookmark: newBookmark });
+    return res.status(201).json({ message: 'Bookmark added' });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
