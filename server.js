@@ -7,6 +7,8 @@ dotenv.config();
 import express from 'express';
 const app = express();
 
+import path from 'path';
+
 // security packages
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -24,6 +26,12 @@ import bookmarks from './routes/bookmarks.js';
 import connectDB from './database/connect.js';
 
 // USE MIDDLEWARE ------------------------------------
+const root = path.join(
+  new URL('.', import.meta.url).pathname,
+  'client',
+  'dist'
+);
+
 // initial config
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
@@ -54,7 +62,22 @@ app.use(
 // compression
 app.use(compression());
 
+// for use in deployment production build
+app.use('/bookmark', express.static(root));
+
 app.use('/api/bookmarks', bookmarks);
+
+// for use in deployment
+app.get('/bookmark/*', (req, res) => {
+  res.sendFile(
+    path.join(
+      new URL('.', import.meta.url).pathname,
+      'client',
+      'dist',
+      'index.html'
+    )
+  );
+});
 
 // SERVER ------------------------------------
 const port = process.env.PORT || 5000;
